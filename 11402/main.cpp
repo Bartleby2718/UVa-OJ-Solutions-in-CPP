@@ -181,8 +181,7 @@ int main()
         branches.insert(0);
         int numSets; // M ≤ 100
         cin >> numSets;
-        long numPirates = 0; // 1 ≤ N ≤ 1,024,000, 0 ~ N-1
-        string pirates;
+        string pirates;  // 1 ≤ N ≤ 1,024,000, 0 ~ N-1
         for (int j = 0; j < numSets; ++j)
         {
             int numRepeat;// T ≤ 200
@@ -191,8 +190,6 @@ int main()
             cin >> pattern;
             for (int k = 0; k < numRepeat; ++k)
             {
-                numPirates += pattern.size();
-                branches.insert(numPirates);
                 pirates += pattern;
             }
         }
