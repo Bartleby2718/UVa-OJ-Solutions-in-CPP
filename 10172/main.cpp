@@ -15,6 +15,8 @@ class Carrier
     vector<queue<int>> platformBs;
     vector<int> cargoes;
 
+    queue<int> &getCargoesInCurrentStation();
+
     void moveToNextPlatform();
 
     void unload();
@@ -39,6 +41,11 @@ Carrier::Carrier(int numStations, int stackCapacity, int queueCapacity, const ve
     }
 }
 
+queue<int> &Carrier::getCargoesInCurrentStation()
+{
+    return platformBs[currentStation];
+}
+
 void Carrier::moveToNextPlatform()
 {
     (++currentStation) %= numStations;
@@ -48,7 +55,7 @@ void Carrier::moveToNextPlatform()
 void Carrier::unload()
 {
     while (!cargoes.empty() &&
-           (cargoes.back() == currentStation || platformBs.at(currentStation).size() < queueCapacity))
+           (cargoes.back() == currentStation || getCargoesInCurrentStation().size() < queueCapacity))
     {
         if (cargoes.back() == currentStation) // unload to platform A
         {
@@ -59,7 +66,8 @@ void Carrier::unload()
         {
             int topCargo = cargoes.back();
             cargoes.pop_back();
-            platformBs.at(currentStation).push(topCargo);
+            queue<int> &cargoesInStation = getCargoesInCurrentStation();
+            cargoesInStation.push(topCargo);
         }
         ++time;
     }
@@ -67,10 +75,11 @@ void Carrier::unload()
 
 void Carrier::load()
 {
-    while (cargoes.size() < stackCapacity && !platformBs.at(currentStation).empty())
+    while (cargoes.size() < stackCapacity && !getCargoesInCurrentStation().empty())
     {
-        int firstCargo = platformBs.at(currentStation).front();
-        platformBs.at(currentStation).pop();
+        queue<int> &cargoesInStation = getCargoesInCurrentStation();
+        int firstCargo = cargoesInStation.front();
+        cargoesInStation.pop();
         cargoes.push_back(firstCargo);
         ++time;
     }
